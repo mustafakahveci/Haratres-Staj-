@@ -1,0 +1,13 @@
+package com.project.haratres;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class HaratresApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(HaratresApplication.class, args);
+	}
+
+}
