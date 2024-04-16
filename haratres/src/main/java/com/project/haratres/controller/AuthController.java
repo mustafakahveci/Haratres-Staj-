@@ -2,9 +2,10 @@ package com.project.haratres.controller;
 
 import com.project.haratres.dto.TokenDto;
 import com.project.haratres.request.LoginRequest;
+import com.project.haratres.request.RegisterRequest;
 import com.project.haratres.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class AuthController {
 
 
     @PostMapping("/register")      //registerrequest olarak güncellenmeli
-    public TokenDto register(@RequestBody LoginRequest request){
+    public TokenDto register(@Valid @RequestBody RegisterRequest request){
          return authService.register(request);
     }
 
