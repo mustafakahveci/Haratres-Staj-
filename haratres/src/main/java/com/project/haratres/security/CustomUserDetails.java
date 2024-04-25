@@ -2,20 +2,36 @@ package com.project.haratres.security;
 
 import com.project.haratres.model.User;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-    public Long id;
+    private String username;
+    private String password;
+    private List<GrantedAuthority> roles;
+
+    CustomUserDetails(User user){
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.roles = Arrays.stream(user.getRole().toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
+
+    /* public Long id;
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
@@ -29,9 +45,13 @@ public class CustomUserDetails implements UserDetails {
 
     public static CustomUserDetails create(User user){
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("user"));
+        Role role = user.getRole();
+        authorityList.add(new SimpleGrantedAuthority(role.toString()));
+        //CUSTOMER dönüyor
+        //System.out.println(
+        // );
         return new CustomUserDetails(user.getId(), user.getUsername(), user.getPassword(), authorityList);
-    }
+    }*/
 /*
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {  //?? bu kısmı sor

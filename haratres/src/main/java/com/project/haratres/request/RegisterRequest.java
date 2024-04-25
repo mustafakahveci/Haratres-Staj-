@@ -1,5 +1,6 @@
 package com.project.haratres.request;
 
+import com.project.haratres.enums.Role;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,5 +17,6 @@ public class RegisterRequest {
     private String username;
     private String password;
     private Date birthDate;
+    private Role role;
 
 }

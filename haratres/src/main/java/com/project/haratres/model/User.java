@@ -1,5 +1,6 @@
 package com.project.haratres.model;
 
+import com.project.haratres.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -44,5 +45,8 @@ public class User {
 
     @NotNull(message = "Doğum tarihi boş olamaz")
     private Date birthDate;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 }
