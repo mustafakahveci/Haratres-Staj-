@@ -20,17 +20,13 @@ public class ProductController {
 
 
     @GetMapping
-    //@PreAuthorize("hasRole('CUSTOMER')")
-    //@Secured("CUSTOMER")
-    @PreAuthorize("hasAuthority('CUSTOMER')")
+    //@PreAuthorize("hasAuthority('CUSTOMER')")
     public List<Product> getAllProducts(){
         return productService.getAllProducts();
     }
 
     @PostMapping
-    //@PreAuthorize("hasRole('ADMIN')")
-    //@Secured("ADMIN")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public String createProduct(@RequestBody InboundProductDto request){
         return productService.createProduct(request);
     }

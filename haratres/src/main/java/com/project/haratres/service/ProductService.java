@@ -1,13 +1,12 @@
 package com.project.haratres.service;
 
+import com.project.haratres.convert.SizeVariantConvert;
+import com.project.haratres.convert.StyleVariantConvert;
 import com.project.haratres.dto.InboundProductDto;
 import com.project.haratres.dto.StyleProductDto;
 import com.project.haratres.dto.VariantProductDto;
-import com.project.haratres.enums.Gender;
-import com.project.haratres.enums.Size;
 import com.project.haratres.model.ApparelSizeVariantProduct;
 import com.project.haratres.model.ApparelStyleVariantProduct;
-import com.project.haratres.model.Category;
 import com.project.haratres.model.Product;
 import com.project.haratres.repository.ApparelSizeVariantRepository;
 import com.project.haratres.repository.ApparelStyleVariantRepository;
@@ -32,61 +31,38 @@ public class ProductService {
     private final ApparelSizeVariantRepository apparelSizeVariantRepository;
 
     @Resource
-    private final CategoryService categoryService;
+    private final StyleVariantConvert styleVariantConvert;
+
+    @Resource
+    private final SizeVariantConvert sizeVariantConvert;
 
     public List<Product> getAllProducts() {
 
         return productRepository.findAll();
+        //find all product for category id
     }
 
     public String createProduct(InboundProductDto request) {
 
         for (StyleProductDto styleProductDto : request.getProducts()) {
             ApparelStyleVariantProduct apparelStyleVariantProduct = new ApparelStyleVariantProduct();
+            apparelStyleVariantProduct = styleVariantConvert.convert(styleProductDto, apparelStyleVariantProduct);
+            apparelStyleVariantRepository.save(apparelStyleVariantProduct);
 
-            Long categoryId = styleProductDto.getCategoryId();
-            Category category = categoryService.findCategoryById(categoryId);
-
-            if (category != null) {
-                apparelStyleVariantProduct.setCategory(category);
-            }
-
-            apparelStyleVariantProduct.setName(styleProductDto.getName());
-            apparelStyleVariantProduct.setColour(styleProductDto.getColour());
-            apparelStyleVariantProduct.setDescription(styleProductDto.getDescription());
-            apparelStyleVariantProduct.setCode(styleProductDto.getCode());
-
-            if (styleProductDto.getGender() == 'E' || styleProductDto.getGender() == 'e') {
-                apparelStyleVariantProduct.setGender(Gender.MALE);
-            } else if (styleProductDto.getGender() == 'K' || styleProductDto.getGender() == 'k') {
-                apparelStyleVariantProduct.setGender(Gender.FEMALE);
-            }
+            List<ApparelSizeVariantProduct> sizeVariantProductsList = new ArrayList<>();
 
             for (VariantProductDto variantProductDto : styleProductDto.getVariants()) {
+
                 ApparelSizeVariantProduct apparelSizeVariantProduct = new ApparelSizeVariantProduct();
-
-                if (Objects.equals(variantProductDto.getSize(), "S")) apparelSizeVariantProduct.setSize(Size.S);
-                else if (Objects.equals(variantProductDto.getSize(), "M")) {
-                    apparelSizeVariantProduct.setSize(Size.M);
-                } else if (Objects.equals(variantProductDto.getSize(), "L")) {
-                    apparelSizeVariantProduct.setSize(Size.L);
-                }
-
-                apparelSizeVariantProduct.setBasedProduct(apparelStyleVariantProduct);
-                apparelSizeVariantProduct.setPrice(variantProductDto.getPrice());
-                apparelSizeVariantProduct.setStock(variantProductDto.getStock());
-                apparelSizeVariantProduct.setCode(variantProductDto.getCode());
-
+                apparelSizeVariantProduct = sizeVariantConvert.convert(variantProductDto,
+                        apparelSizeVariantProduct, apparelStyleVariantProduct);
                 apparelSizeVariantRepository.save(apparelSizeVariantProduct);
-                if (Objects.isNull(apparelStyleVariantProduct.getSizeVariantProducts())) {
-                    List<ApparelSizeVariantProduct> sizeVariantProducts = new ArrayList<>();
-                    sizeVariantProducts.add(apparelSizeVariantProduct);
-                    apparelStyleVariantProduct.setSizeVariantProducts(sizeVariantProducts);
-                } else {
-                    apparelStyleVariantProduct.getSizeVariantProducts().add(apparelSizeVariantProduct);
-                }
+
+                sizeVariantProductsList.add(apparelSizeVariantProduct);
             }
+            apparelStyleVariantProduct = styleVariantConvert.addVariants(apparelStyleVariantProduct, sizeVariantProductsList);
             apparelStyleVariantRepository.save(apparelStyleVariantProduct);
+            sizeVariantProductsList.clear();
         }
         return "ürün yükleme başarılı";
     }
