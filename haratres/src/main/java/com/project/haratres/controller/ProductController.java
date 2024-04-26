@@ -1,14 +1,14 @@
 package com.project.haratres.controller;
 
 import com.project.haratres.dto.InboundProductDto;
-import com.project.haratres.model.Product;
+import com.project.haratres.dto.ProductDto;
 import com.project.haratres.service.ProductService;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/product")
@@ -18,16 +18,15 @@ public class ProductController {
     @Resource
     private final ProductService productService;
 
-
     @GetMapping
     //@PreAuthorize("hasAuthority('CUSTOMER')")
-    public List<Product> getAllProducts(){
-        return productService.getAllProducts();
+    public List<ProductDto> getAllProductsWithParam(@RequestParam Optional<Long> categoryId) {
+        return productService.getAllProductsWithParam(categoryId);
     }
 
     @PostMapping
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public String createProduct(@RequestBody InboundProductDto request){
+    public String createProduct(@RequestBody InboundProductDto request) {
         return productService.createProduct(request);
     }
 

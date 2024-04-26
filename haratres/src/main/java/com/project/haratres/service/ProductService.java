@@ -3,19 +3,22 @@ package com.project.haratres.service;
 import com.project.haratres.convert.SizeVariantConvert;
 import com.project.haratres.convert.StyleVariantConvert;
 import com.project.haratres.dto.InboundProductDto;
+import com.project.haratres.dto.ProductDto;
 import com.project.haratres.dto.StyleProductDto;
 import com.project.haratres.dto.VariantProductDto;
 import com.project.haratres.model.ApparelSizeVariantProduct;
 import com.project.haratres.model.ApparelStyleVariantProduct;
-import com.project.haratres.model.Product;
+import com.project.haratres.model.Category;
 import com.project.haratres.repository.ApparelSizeVariantRepository;
 import com.project.haratres.repository.ApparelStyleVariantRepository;
 import com.project.haratres.repository.ProductRepository;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +39,25 @@ public class ProductService {
     @Resource
     private final SizeVariantConvert sizeVariantConvert;
 
-    public List<Product> getAllProducts() {
+    @Resource
+    private final ModelMapper modelMapper;
 
-        return productRepository.findAll();
-        //find all product for category id
+    @Resource
+    private final CategoryService categoryService;
+
+    public List<ProductDto> getAllProductsWithParam(Optional<Long> categoryId) {
+        if (categoryId.isPresent()) {
+            Long id = categoryId.get();
+            Category inDB = categoryService.findCategoryById(id);
+            return apparelStyleVariantRepository.findProductsByCategoryId(inDB.getId()).stream()
+                    .map(x -> modelMapper.map(x, ProductDto.class))
+                    .collect(Collectors.toList());
+
+        } else {
+            return productRepository.findAll().stream()
+                    .map(book -> modelMapper.map(book, ProductDto.class))
+                    .collect(Collectors.toList());
+        }
     }
 
     public String createProduct(InboundProductDto request) {
@@ -66,6 +84,5 @@ public class ProductService {
         }
         return "ürün yükleme başarılı";
     }
-
 
 }

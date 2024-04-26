@@ -37,7 +37,6 @@ public class StyleVariantConvert {
         } else if (dto.getGender() == 'K' || dto.getGender() == 'k') {
             model.setGender(Gender.FEMALE);
         }
-
         return model;
     }
 

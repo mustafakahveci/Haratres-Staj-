@@ -12,7 +12,7 @@ import java.util.List;
 public class ApparelStyleVariantProduct extends Product{
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "categoryId")
     private Category category;
     private String colour;
 

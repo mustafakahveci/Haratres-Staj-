@@ -24,10 +24,9 @@ public class CategoryService {
     @Resource
     private ModelMapper modelMapper;
 
-    public Category findCategoryById(Long id){
+    public Category findCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(()-> new GenericException("Category not found!", HttpStatus.NOT_FOUND));
-
+                .orElseThrow(() -> new GenericException("Category not found!", HttpStatus.NOT_FOUND));
     }
 
     public List<CategoryDto> getAllCategories() {
@@ -41,6 +40,6 @@ public class CategoryService {
                 .name(request.getName())
                 .build();
         categoryRepository.save(category);
-        return modelMapper.map(category,CategoryDto.class);
+        return modelMapper.map(category, CategoryDto.class);
     }
 }
