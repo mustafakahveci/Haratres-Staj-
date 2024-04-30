@@ -11,8 +11,10 @@ import java.util.Objects;
 @Component
 public class SizeVariantConvert {
 
-    public ApparelSizeVariantProduct convert(VariantProductDto dto, ApparelSizeVariantProduct model,
+    public ApparelSizeVariantProduct convert(VariantProductDto dto,
                                              ApparelStyleVariantProduct baseProduct) {
+
+        ApparelSizeVariantProduct model = new ApparelSizeVariantProduct();
 
         model.setCode(dto.getCode());
         model.setPrice(dto.getPrice());

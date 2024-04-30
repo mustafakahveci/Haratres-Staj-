@@ -1,6 +1,7 @@
 package com.project.haratres.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.DiscriminatorOptions;
 
@@ -16,6 +17,7 @@ import org.hibernate.annotations.DiscriminatorOptions;
 public class Product {
 
     @Id
+    @NotBlank(message = "Ürün kodu boş olamaz")
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private String code;
 

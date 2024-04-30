@@ -29,7 +29,7 @@ public class JwtTokenService {
                 .setSubject(userDetails.getUsername())
                 .setIssuer(userDetails.getAuthorities().iterator().next().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))  // 1 saat
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))  // 24 saat
                 .signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
 

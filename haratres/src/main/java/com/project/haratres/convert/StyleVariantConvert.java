@@ -19,7 +19,9 @@ public class StyleVariantConvert {
     @Resource
     private final CategoryService categoryService;
 
-    public ApparelStyleVariantProduct convert(StyleProductDto dto, ApparelStyleVariantProduct model) {
+    public ApparelStyleVariantProduct convert(StyleProductDto dto) {
+
+        ApparelStyleVariantProduct model = new ApparelStyleVariantProduct();
 
         Long categoryId = dto.getCategoryId();
         Category category = categoryService.findCategoryById(categoryId);

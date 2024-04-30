@@ -1,9 +1,10 @@
 package com.project.haratres.controller;
 
 import com.project.haratres.dto.InboundProductDto;
-import com.project.haratres.dto.ProductDto;
+import com.project.haratres.dto.StyleProductDto;
 import com.project.haratres.service.ProductService;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +21,19 @@ public class ProductController {
 
     @GetMapping
     //@PreAuthorize("hasAuthority('CUSTOMER')")
-    public List<ProductDto> getAllProductsWithParam(@RequestParam Optional<Long> categoryId) {
+    public List<StyleProductDto> getAllProductsWithParam(@RequestParam Optional<Long> categoryId) {
         return productService.getAllProductsWithParam(categoryId);
     }
 
     @PostMapping
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public String createProduct(@RequestBody InboundProductDto request) {
+    public String createProduct(@Valid @RequestBody InboundProductDto request) {
         return productService.createProduct(request);
+    }
+
+    @GetMapping("/{code}")
+    public StyleProductDto getProductDetail(@PathVariable String code){
+        return productService.getProductDetail(code);
     }
 
 }

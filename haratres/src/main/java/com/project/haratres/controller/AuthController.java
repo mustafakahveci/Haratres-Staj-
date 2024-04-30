@@ -20,15 +20,15 @@ public class AuthController {
     @Resource
     private final AuthService authService;
 
-     @PostMapping("/login")
-    public TokenDto login(@RequestBody LoginRequest request){
+    @PostMapping("/login")
+    public TokenDto login(@RequestBody LoginRequest request) {
         return authService.login(request);
-     }
+    }
 
 
     @PostMapping("/register")
-    public TokenDto register(@Valid @RequestBody RegisterRequest request){
-         return authService.register(request);
+    public TokenDto register(@Valid @RequestBody RegisterRequest request) {
+        return authService.register(request);
     }
 
 }

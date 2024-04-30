@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ApparelStyleVariantRepository extends JpaRepository<ApparelStyleVariantProduct,String> {
-    List<Product> findProductsByCategoryId(Long categoryId);
+    List<ApparelStyleVariantProduct> findProductsByCategoryId(Long categoryId);
 }
